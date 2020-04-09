@@ -41,7 +41,13 @@ Description
 #include "fvOptions.H"
 #include "orthogonalSnGrad.H"
 
+
 #include "RegularizationModel.H"
+
+#include "TaylorGreenVortex.H"
+#include "TaylorGreenVortex2D.H"
+#include "TaylorGreenVortex3D.H"
+// * * * * * * * * * * * * * * * 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 int main(int argc, char *argv[])
@@ -62,8 +68,8 @@ int main(int argc, char *argv[])
     Foam::fv::orthogonalSnGrad<scalar> faceGradient(mesh);
 
     #include "createRegularization.H"
-    
-    // // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+    #include "createTGV.H"
 
     Info<< "\nStarting time loop\n" << endl;
 
@@ -88,6 +94,8 @@ int main(int argc, char *argv[])
 
         runTime.write();
 
+        #include "writeTGV.H"
+
         Info<< "ExecutionTime = " << runTime.elapsedCpuTime() << " s"
             << "  ClockTime = " << runTime.elapsedClockTime() << " s"
             << nl << endl;
@@ -96,6 +104,8 @@ int main(int argc, char *argv[])
     Info<< "End\n" << endl;
 
     #include "clearRegularization.H"
+    
+    #include "clearTGV.H"
     return 0;
 }
 
