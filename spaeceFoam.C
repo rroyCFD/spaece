@@ -41,6 +41,9 @@ Description
 #include "fvOptions.H"
 #include "orthogonalSnGrad.H"
 
+#include "TaylorGreenVortex.H"
+#include "TaylorGreenVortex2D.H"
+#include "TaylorGreenVortex3D.H"
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 int main(int argc, char *argv[])
@@ -59,8 +62,10 @@ int main(int argc, char *argv[])
     // Rhie-Chow correction: cell-centers vector and face normal gradient
     const surfaceVectorField ed = mesh.delta()()/mag(mesh.delta()());
     Foam::fv::orthogonalSnGrad<scalar> faceGradient(mesh);
-    
-    // // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+    #include "createTGV.H"
+
+    // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
     Info<< "\nStarting time loop\n" << endl;
 
@@ -85,12 +90,15 @@ int main(int argc, char *argv[])
 
         runTime.write();
 
+        #include "writeTGV.H"
+
         Info<< "ExecutionTime = " << runTime.elapsedCpuTime() << " s"
             << "  ClockTime = " << runTime.elapsedClockTime() << " s"
             << nl << endl;
     }
 
     Info<< "End\n" << endl;
+    #include "clearTGV.H"
 
     return 0;
 }
