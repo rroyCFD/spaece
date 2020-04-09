@@ -17,9 +17,19 @@ UEqn.relax();
 
 fvOptions.constrain(UEqn);
 
+if(regOn)
+{
+    // subtract advection correction to attenuate high frequency modes
+    solve
+    (
+        (UEqn == RegModel->convectionResidual(phi, U) ), 
+        mesh.solver(U.select(spaece.finalSPAeCEIter()))
+    );
+}
+else
 {
 	// Use UFinal for last-leg of the loop
 	solve(UEqn, mesh.solver(U.select(spaece.finalSPAeCEIter())));
-
-	fvOptions.correct(U);
 }
+
+fvOptions.correct(U);

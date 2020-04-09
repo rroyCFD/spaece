@@ -41,6 +41,7 @@ Description
 #include "fvOptions.H"
 #include "orthogonalSnGrad.H"
 
+#include "RegularizationModel.H"
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 int main(int argc, char *argv[])
@@ -59,6 +60,8 @@ int main(int argc, char *argv[])
     // Rhie-Chow correction: cell-centers vector and face normal gradient
     const surfaceVectorField ed = mesh.delta()()/mag(mesh.delta()());
     Foam::fv::orthogonalSnGrad<scalar> faceGradient(mesh);
+
+    #include "createRegularization.H"
     
     // // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
@@ -92,6 +95,7 @@ int main(int argc, char *argv[])
 
     Info<< "End\n" << endl;
 
+    #include "clearRegularization.H"
     return 0;
 }
 
