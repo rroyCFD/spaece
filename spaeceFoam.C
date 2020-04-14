@@ -59,8 +59,6 @@ int main(int argc, char *argv[])
     #include "createFields.H"
     #include "initContinuityErrs.H"
 
-    turbulence->validate();
-
     #include "postProcess.H"
 
     // Rhie-Chow correction: cell-centers vector and face normal gradient
@@ -70,6 +68,9 @@ int main(int argc, char *argv[])
     #include "createRegularization.H"
 
     #include "createTGV.H"
+    #include "writeTGV.H"
+
+    turbulence->validate();
 
     Info<< "\nStarting time loop\n" << endl;
 
