@@ -39,15 +39,16 @@ Description
 #include "turbulentTransportModel.H"
 #include "spaeceControl.H"
 #include "fvOptions.H"
+// * * * * * * * * * * * * * * * 
 #include "orthogonalSnGrad.H"
 
-
 #include "RegularizationModel.H"
+
+#include "kineticEnergyAnalysis.H"
 
 #include "TaylorGreenVortex.H"
 #include "TaylorGreenVortex2D.H"
 #include "TaylorGreenVortex3D.H"
-// * * * * * * * * * * * * * * * 
 // * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
 
 int main(int argc, char *argv[])
@@ -86,7 +87,6 @@ int main(int argc, char *argv[])
         while (spaece.correct())
         {
             #include "UEqn.H"
-
             #include "ppEqn.H"
         }
 
@@ -95,6 +95,7 @@ int main(int argc, char *argv[])
 
         runTime.write();
 
+        #include "writeKineticEnergy.H"
         #include "writeTGV.H"
 
         Info<< "ExecutionTime = " << runTime.elapsedCpuTime() << " s"
@@ -106,7 +107,9 @@ int main(int argc, char *argv[])
 
     #include "clearRegularization.H"
     
+    #include "clearKineticEnergy.H"
     #include "clearTGV.H"
+
     return 0;
 }
 
