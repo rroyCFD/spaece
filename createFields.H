@@ -54,7 +54,3 @@ mesh.setFluxRequired(pp.name());
 // Read solution control parameters
 const scalar kappa(spaece.dict().lookupOrDefault<scalar>("kappa", 0.50));
 Info << "Extrapolation coeff. kappa: " << kappa << endl;
-
-// Check for the RhieChow correction
-bool RhieChow (spaece.dict().lookupOrDefault<bool>("RhieChow", true));
-Info << "RhieChow: " << RhieChow << endl;

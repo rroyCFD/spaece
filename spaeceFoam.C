@@ -61,12 +61,12 @@ int main(int argc, char *argv[])
 
     #include "postProcess.H"
 
-    // Rhie-Chow correction: cell-centers vector and face normal gradient
-    const surfaceVectorField ed = mesh.delta()()/mag(mesh.delta()());
-    Foam::fv::orthogonalSnGrad<scalar> faceGradient(mesh);
+    #include "createRhieChow.H"
 
     #include "createRegularization.H"
 
+    #include "createKineticEnergy.H"
+    
     #include "createTGV.H"
     #include "writeTGV.H"
 
