@@ -14,6 +14,7 @@ EXE_INC = \
     -I$(WM_PROJECT_USER_DIR)/src/kineticEnergyAnalysis/lnInclude \
     -I$(WM_PROJECT_USER_DIR)/src/RegularizationModel/lnInclude \
     -I$(WM_PROJECT_USER_DIR)/src/TaylorGreenVortex/lnInclude \
+    -I$(WM_PROJECT_USER_DIR)/src/OpenFOAM/lnInclude \
 
 
 EXE_LIBS = \
@@ -25,9 +26,10 @@ EXE_LIBS = \
     -lfvOptions \
     -lsampling \
     -L$(FOAM_USER_LIBBIN) \
-    -lturbulenceModels_rroy\
-    -lincompressibleTurbulenceModels_rroy \
-    -lfiniteVolume_rroy \
+    -lturbulenceModels_$(USER)\
+    -lincompressibleTurbulenceModels_$(USER) \
+    -lfiniteVolume_$(USER) \
     -lKineticEnergyAnalysis \
     -lRegularization \
-    -lTaylorGreenVortex
+    -lTaylorGreenVortex \
+    -lOpenFOAM_$(USER)

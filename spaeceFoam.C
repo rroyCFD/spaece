@@ -62,6 +62,8 @@ int main(int argc, char *argv[])
 
     #include "postProcess.H"
 
+    #include "createCourantNo.H"
+
     #include "createRhieChow.H"
 
     #include "createRegularization.H"
@@ -79,7 +81,8 @@ int main(int argc, char *argv[])
     {
         Info<< "Time = " << runTime.timeName() << nl << endl;
 
-        #include "CourantNo.H"
+        // #include "CourantNo.H"
+        #include "calcCourantNo.H"
 
         #include "extrapolateFields.H"
 
