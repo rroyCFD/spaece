@@ -1,11 +1,27 @@
 // fvVectorMatrix UEqn
+// tmp<fvVectorMatrix> tUEqn
+// (
+//       fvm::ddt(U)
+//     // + MRF.DDt(U)
+//     + fvc::div(phi,U) - U*fvc::div(phi) // advection explicit   
+//     - fvm::laplacian(turbulence->nuEff(), U) 
+//     - fvc::div(turbulence->nuEff() * dev2(T(fvc::grad(U))))
+//     ==
+//     - fvc::grad(p) 
+//     + fvOptions(U)
+// );
+
+// CrankNicolson split of the diffusion (laplacian) term
 tmp<fvVectorMatrix> tUEqn
 (
       fvm::ddt(U)
-    + MRF.DDt(U)
-    + (fvc::div(phi,U) - U * fvc::div(phi)) // advection explict
-    // + turbulence->divDevReff(U)
-    - fvm::laplacian(turbulence->nuEff(), U)
+    + fvc::div(phi,U) // advection explicit is necessary for KE conservation
+    // CrankNicolson split for advection is dissipative
+    // + 0.5*(fvm::div(phi,U) + fvc::div(phi,U)) 
+    - 0.5*(
+          fvm::laplacian(turbulence->nuEff(), U) 
+        + fvc::laplacian(turbulence->nuEff(), U)
+    )
     - fvc::div(turbulence->nuEff() * dev2(T(fvc::grad(U))))
     ==
     - fvc::grad(p) 
