@@ -1,16 +1,3 @@
-// fvVectorMatrix UEqn
-// tmp<fvVectorMatrix> tUEqn
-// (
-//       fvm::ddt(U)
-//     // + MRF.DDt(U)
-//     + fvc::div(phi,U) - U*fvc::div(phi) // advection explicit   
-//     - fvm::laplacian(turbulence->nuEff(), U) 
-//     - fvc::div(turbulence->nuEff() * dev2(T(fvc::grad(U))))
-//     ==
-//     - fvc::grad(p) 
-//     + fvOptions(U)
-// );
-
 // CrankNicolson split of the diffusion (laplacian) term
 tmp<fvVectorMatrix> tUEqn
 (
@@ -48,4 +35,5 @@ else
 	solve(UEqn, mesh.solver(U.select(spaece.finalSPAeCEIter())));
 }
 
-fvOptions.correct(U);
+// can create negative driving presssure grad when momentum is over-predicted
+// fvOptions.correct(U);
