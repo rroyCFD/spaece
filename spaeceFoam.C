@@ -71,9 +71,9 @@ int main(int argc, char *argv[])
 
     #include "createRhieChow.H"
 
-    #include "createRegularization.H"
-
     #include "createKineticEnergy.H"
+
+    #include "createRegularization.H"
     
     #include "createTGV.H"
     #include "writeTGV.H"
@@ -104,6 +104,7 @@ int main(int argc, char *argv[])
         runTime.write();
 
         #include "writeKineticEnergy.H"
+        #include "writeRegularizedAdvectionKE.H"
         #include "writeTGV.H"
 
         Info<< "ExecutionTime = " << runTime.elapsedCpuTime() << " s"

@@ -1,5 +1,4 @@
 // RegularizationModel
-
 RegularizationModel* RegModel;
 
 // Check the convection-term-regularization on or off
@@ -17,7 +16,6 @@ if(regOn)
          << filterFieldDivFree << endl;
 }
 
-
 if(regOn)
 {
     RegModel = new RegularizationModel(
@@ -25,10 +23,18 @@ if(regOn)
     RegModel->setRegOn(regOn);
     RegModel->setFilterFieldsDivFree(filterFieldDivFree);
     // Info << "Regularization Object Constructor" << endl;
+    
 }
 else
 {
     delete RegModel;
 }
 
+//- write regularized Advection KE when KEAnalysis is True
+autoPtr<OFstream> regAdvKEFile;
+if(KEAnalysis && regOn)
+{
+    #include "createRegularizedAdvectionKE.H"
+    #include "writeRegularizedAdvectionKE.H"
+}
 //------------------------------------------------------------------------//
