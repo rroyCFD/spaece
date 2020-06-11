@@ -2,7 +2,7 @@
 tmp<fvVectorMatrix> tUEqn
 (
       fvm::ddt(U)
-    + fvc::div(phi,U) // advection explicit is necessary for KE conservation
+    + RegModel->getConvectionTerm(phi, U) // regularized 
     // CrankNicolson split for advection is dissipative
     // + 0.5*(fvm::div(phi,U) + fvc::div(phi,U)) 
     - 0.5*(
@@ -20,20 +20,9 @@ UEqn.relax();
 
 fvOptions.constrain(UEqn);
 
-if(regOn)
-{
-    // subtract advection correction to attenuate high frequency modes
-    solve
-    (
-        (UEqn == RegModel->convectionResidual(phi, U) ), 
-        mesh.solver(U.select(spaece.finalSPAeCEIter()))
-    );
-}
-else
-{
-	// Use UFinal for last-leg of the loop
-	solve(UEqn, mesh.solver(U.select(spaece.finalSPAeCEIter())));
-}
+solve(UEqn);
+// To track residual; use UFinal for last-leg of the loop
+// solve(UEqn, mesh.solver(U.select(spaece.finalSPAeCEIter())));
 
-// can create negative driving presssure grad when momentum is over-predicted
+// Can create negative driving presssure grad when momentum is over-predicted
 // fvOptions.correct(U);

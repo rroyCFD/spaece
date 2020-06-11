@@ -12,7 +12,7 @@ if(KEAnalysis && regOn)
                 IOobject::NO_READ,
                 IOobject::NO_WRITE
             ),
-            (U & RegModel->convectionResidual(phi, U))
+            (U & RegModel->getConvectionTerm(phi, U))
         )
     );
     volScalarField& regAdvKE = tRegAdvKE.ref();
