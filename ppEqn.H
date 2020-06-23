@@ -1,5 +1,6 @@
 volScalarField rAU(1.0/UEqn.A());
-tUEqn.clear();
+// tUEqn.clear();
+delete UEqnPtr;
 
 // RhieChow flux correction
 if(RhieChow)
