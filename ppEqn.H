@@ -35,7 +35,8 @@ adjustPhi(phi, U, p);
 
 // Update the pressure BCs to ensure flux consistency
 // applicable at fixedFlux type pressure boundaries
-constrainPressure(p, U, phi, rAU, MRF);
+// fixedFluxPressure require phiHbyA to determine pressure gradient at boundary
+// constrainPressure(p, U, phi, rAU, MRF);
 
 
 // pressure corrector loop (with Non-orthogonal correction)
@@ -75,3 +76,6 @@ p += pp;
 p.correctBoundaryConditions();
 
 // Info << "fields updated" << endl;
+
+// set pressure correction to zero; reduce memory overhead
+pp.primitiveFieldRef() = 0.0;
