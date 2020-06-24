@@ -42,8 +42,10 @@ if(fixedFluxBC)
 }
 
 // pressure corrector loop (with Non-orthogonal correction)
-pp.primitiveFieldRef() = 0.0;
-pp.correctBoundaryConditions();
+// - pp shall not set to zero and pp at old time is a better approximation than
+//   0; reduced number of pressure corrections ~25% (from 14 to 11)
+// pp.primitiveFieldRef() = 0.0;
+// pp.correctBoundaryConditions();
 
 while (spaece.correctNonOrthogonal())
 {
@@ -79,5 +81,6 @@ p.correctBoundaryConditions();
 
 // Info << "fields updated" << endl;
 
-// set pressure correction to zero; reduce memory overhead
-pp.primitiveFieldRef() = 0.0;
+// pp shall not set ot zero; see explanantion above
+// // set pressure correction to zero; reduce memory overhead
+// pp.primitiveFieldRef() = 0.0;
