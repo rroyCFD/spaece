@@ -7,6 +7,9 @@ const wordList pbt = p.boundaryField().types();
 // if pressure BC is a fixed Gradient type, pp is same gradient
 wordList ppbt = pbt;
 
+// check for fixedFluxPressure BC
+bool fixedFluxBC (false);
+
 forAll(ppbt, b)
 {
     if(ppbt[b] == "timeVaryingMappedFixedValue")
@@ -18,6 +21,7 @@ forAll(ppbt, b)
     else if(ppbt[b] == "fixedFluxPressure")
     {
         ppbt[b] = "fixedGradient";
+        fixedFluxBC = true;
     }
 }
 

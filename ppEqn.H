@@ -36,7 +36,10 @@ adjustPhi(phi, U, p);
 // Update the pressure BCs to ensure flux consistency
 // applicable at fixedFlux type pressure boundaries
 // update fixedFluxPressure BC for p and copy gradient to pp
-#include "updatefixedFluxPressureGrad.H"
+if(fixedFluxBC)
+{
+    #include "updatefixedFluxPressureGrad.H"
+}
 
 // pressure corrector loop (with Non-orthogonal correction)
 pp.primitiveFieldRef() = 0.0;
