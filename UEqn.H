@@ -22,7 +22,8 @@ else
     UEqnPtr = new fvVectorMatrix
     (
           fvm::ddt(U)
-        + fvc::div(phi,U)
+        // + fvc::div(phi,U)
+        + 0.5*(fvm::div(phi,U) + fvc::div(phi,U)) 
         - 0.5*(
               fvm::laplacian(turbulence->nuEff(), U) 
             + fvc::laplacian(turbulence->nuEff(), U)
