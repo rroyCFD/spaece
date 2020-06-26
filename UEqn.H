@@ -36,18 +36,29 @@
 
 // fvVectorMatrix& UEqn = *UEqnPtr;
 
+// tmp<fvVectorMatrix> tUEqn
+// (
+//     fvm::ddt(U) // shall be implicit Euler
+//     // classical CrankNicolson scheme
+//     + 0.5*(
+//             fvm::div(phi,U) 
+//           + fvc::div(phi.oldTime(), U.oldTime())
+          
+//           // written for eddy viscosity as it's easy to split
+//           - fvm::laplacian(turbulence->nuEff(), U) 
+//           - fvc::laplacian(turbulence->nuEff(), U.oldTime())
+//     )
+//     - fvc::div(turbulence->nuEff() * dev2(T(fvc::grad(U))))
+//     ==
+//     fvOptions(U)
+// );
+
+// Generic ddtScheme
 tmp<fvVectorMatrix> tUEqn
 (
-    fvm::ddt(U) // shall be implicit Euler
-    // classical CrankNicolson scheme
-    + 0.5*(
-            fvm::div(phi,U) 
-          + fvc::div(phi.oldTime(), U.oldTime())
-          
-          // written for eddy viscosity as it's easy to split
-          - fvm::laplacian(turbulence->nuEff(), U) 
-          - fvc::laplacian(turbulence->nuEff(), U.oldTime())
-    )
+      fvm::ddt(U)
+    + fvm::div(phi,U)
+    - fvm::laplacian(turbulence->nuEff(), U)
     - fvc::div(turbulence->nuEff() * dev2(T(fvc::grad(U))))
     ==
     fvOptions(U)
