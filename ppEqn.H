@@ -1,6 +1,4 @@
 volScalarField rAU(1.0/UEqn.A());
-// tUEqn.clear();
-delete UEqnPtr;
 
 // RhieChow flux correction
 if(RhieChow)
@@ -40,6 +38,9 @@ if(fixedFluxBC)
 {
     #include "updatefixedFluxPressureGrad.H"
 }
+
+tUEqn.clear();
+// delete UEqnPtr;
 
 // pressure corrector loop (with Non-orthogonal correction)
 // - pp shall not set to zero and pp at old time is a better approximation than
