@@ -1,3 +1,4 @@
+// Explicit terms: U and phi are extrapolated or updated (multiple outer corr)
 fvVectorMatrix *UEqnPtr;
 
 if(regOn)
@@ -6,11 +7,11 @@ if(regOn)
     (
           fvm::ddt(U)
         + RegModel->getConvectionTerm(phi, U) // regularized 
-        // CrankNicolson split for advection is dissipative
-        // + 0.5*(fvm::div(phi,U) + fvc::div(phi,U)) 
+        // CrankNicolson split for advection is not applied
+        // + 0.5*(fvm::div(phi,U) + fvc::div(phi,U.oldTime())) 
         - 0.5*(
               fvm::laplacian(turbulence->nuEff(), U) 
-            + fvc::laplacian(turbulence->nuEff(), U)
+            + fvc::laplacian(turbulence->nuEff(), U.oldTime())
         )
         - fvc::div(turbulence->nuEff() * dev2(T(fvc::grad(U))))
         ==
@@ -25,7 +26,7 @@ else
         + fvc::div(phi,U)
         - 0.5*(
               fvm::laplacian(turbulence->nuEff(), U) 
-            + fvc::laplacian(turbulence->nuEff(), U)
+            + fvc::laplacian(turbulence->nuEff(), U.oldTime())
         )
         - fvc::div(turbulence->nuEff() * dev2(T(fvc::grad(U))))
         ==
