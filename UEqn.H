@@ -6,9 +6,10 @@ if(regOn)
     UEqnPtr = new fvVectorMatrix
     (
           fvm::ddt(U)
-        + RegModel->getConvectionTerm(phi, U) // regularized 
-        // CrankNicolson split for advection is not applied
+        // CrankNicolson split for advection is not applied for ease of regularization
+        // implicit or semi-implicit discretization allows for A6 regulariation only
         // + 0.5*(fvm::div(phi,U) + fvc::div(phi,U.oldTime())) 
+        + RegModel->getConvectionTerm(phi, U) // regularized 
         - 0.5*(
               fvm::laplacian(turbulence->nuEff(), U) 
             + fvc::laplacian(turbulence->nuEff(), U.oldTime())
