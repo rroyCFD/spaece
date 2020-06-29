@@ -88,7 +88,8 @@ int main(int argc, char *argv[])
         #include "extrapolateFields.H"
 
         // Pressure-velocity corrector
-        while (spaece.correct())
+        // while (spaece.correct())
+        // multiple outer corrector with explicit advection lead to artificial dissipation
         {
             #include "UEqn.H"
             #include "ppEqn.H"

@@ -69,7 +69,9 @@ while (spaece.correctNonOrthogonal())
     scalar ppRefValue = pRefValue - getRefCellValue(p, pRefCell);
     ppEqn.setReference(pRefCell, ppRefValue);
 
-    ppEqn.solve(mesh.solver(pp.select(spaece.finalInnerIter())));
+    // ppEqn.solve(mesh.solver(pp.select(spaece.finalInnerIter())));
+    // nCorrectors input is ignored! forced to 1
+    ppEqn.solve(mesh.solver(pp.select(spaece.finalNonOrthogonalIter())));
 
     if (spaece.finalNonOrthogonalIter())
     {
@@ -83,7 +85,7 @@ if(spaece.finalSPAeCEIter())
     #include "continuityErrs.H"
 }
 
-U -= rAU*fvc::grad(pp);
+U -= rAtU()*fvc::grad(pp);
 U.correctBoundaryConditions();
 fvOptions.correct(U);
 
