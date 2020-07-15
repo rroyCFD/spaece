@@ -86,6 +86,9 @@ if(TGVPropertiesHeader.typeHeaderOk<dictionary>(true))
         }
         p.write();
     }
+
+    // write initial properties
+    #include "writeTGV.H"
 }
 else
 {

@@ -66,17 +66,13 @@ int main(int argc, char *argv[])
     #include "initContinuityErrs.H"
 
     #include "postProcess.H"
-
     #include "createCourantNo.H"
 
     #include "createRhieChow.H"
-
     #include "createKineticEnergy.H"
-
     #include "createRegularization.H"
     
     #include "createTGV.H"
-    #include "writeTGV.H"
 
     turbulence->validate();
 
@@ -92,6 +88,8 @@ int main(int argc, char *argv[])
         #include "extrapolateFields.H"
 
         // Pressure-velocity corrector
+        // multiple outer corrector with explicit advection lead to artificial dissipation
+        // but implicit advection does not add artificial dissipation
         while (spaece.correct())
         {
             #include "UEqn.H"
@@ -115,7 +113,6 @@ int main(int argc, char *argv[])
     Info<< "End\n" << endl;
 
     #include "clearRegularization.H"
-    
     #include "clearKineticEnergy.H"
     #include "clearTGV.H"
 

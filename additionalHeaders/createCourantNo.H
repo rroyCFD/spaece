@@ -4,7 +4,9 @@ Global
 
 Description
     Calculates and outputs the mean and maximum Courant Numbers.
-
+    
+    Creates CFL IO dictionary, which is avaiable for use by other object
+    e.g. use CFL number to blend upwind scheme to a CD scheme
 \*---------------------------------------------------------------------------*/
 scalar CoNum = 0.0;
 scalar meanCoNum = 0.0;

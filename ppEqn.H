@@ -31,6 +31,15 @@ else
 // normalizes flux based on mass in vs mass out balance
 adjustPhi(phi, U, p);
 
+// SIMPLE-consistent like correction to diagonal coefficients
+tmp<volScalarField> rAtU(rAU);
+if (spaece.consistent())
+{
+    rAtU = 1.0/(1.0/rAU - UEqn.H1());
+}
+
+// rAtU = dt when advection (implicit) term is skew-symmetric and Laplace term is symmetric
+
 // Update the pressure BCs to ensure flux consistency
 // applicable at fixedFlux type pressure boundaries
 // update fixedFluxPressure BC for p and copy gradient to pp
@@ -52,14 +61,16 @@ while (spaece.correctNonOrthogonal())
 {
     fvScalarMatrix ppEqn
     (
-      fvm::laplacian(rAU, pp, "laplacian(p)") == (fvc::div(phi))
+      fvm::laplacian(rAtU(), pp, "laplacian(p)") == (fvc::div(phi))
     );
 
     // no correction to reference cell pressure
     scalar ppRefValue = pRefValue - getRefCellValue(p, pRefCell);
     ppEqn.setReference(pRefCell, ppRefValue);
 
-    ppEqn.solve(mesh.solver(pp.select(spaece.finalInnerIter())));
+    // ppEqn.solve(mesh.solver(pp.select(spaece.finalInnerIter())));
+    // nCorrectors input is ignored! forced to 1
+    ppEqn.solve(mesh.solver(pp.select(spaece.finalNonOrthogonalIter())));
 
     if (spaece.finalNonOrthogonalIter())
     {
@@ -73,7 +84,7 @@ if(spaece.finalSPAeCEIter())
     #include "continuityErrs.H"
 }
 
-U -= rAU*fvc::grad(pp);
+U -= rAtU()*fvc::grad(pp);
 U.correctBoundaryConditions();
 fvOptions.correct(U);
 
