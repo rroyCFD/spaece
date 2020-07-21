@@ -3,17 +3,12 @@ volScalarField rAU(1.0/UEqn.A());
 // RhieChow flux correction
 if(RhieChow)
 {
-    tmp<surfaceVectorField> gradpDiff_f
+    tmp<surfaceScalarField> gradpDiff_f
     (
-        (  (fvc::interpolate(fvc::grad(p)) & ed)
-          - faceGradient.snGrad(p)
-        ) * ed
+        (((fvc::interpolate(fvc::grad(p)) & ed) - faceGradient.snGrad(p)) * ed)
+        & mesh.Sf()
     );
-
-    phi =
-        fvc::flux(U)
-        + fvc::interpolate(rAU)* (gradpDiff_f() & mesh.Sf());
-
+    phi = fvc::flux(U) + fvc::interpolate(rAU)* gradpDiff_f();
     gradpDiff_f.clear();
 }
 else
