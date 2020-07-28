@@ -1,15 +1,32 @@
 volScalarField rAU(1.0/UEqn.A());
+surfaceScalarField rAUf = fvc::interpolate(rAU);
 
 // RhieChow flux correction
-if(RhieChow)
+if(RhieChow & ddtCorr)
 {
     tmp<surfaceScalarField> gradpDiff_f
     (
         (((fvc::interpolate(fvc::grad(p)) & ed) - faceGradient.snGrad(p)) * ed)
         & mesh.Sf()
     );
-    phi = fvc::flux(U) + fvc::interpolate(rAU)* gradpDiff_f();
+    // ddt correction involves U.oldTime and phi.oldTime;
+    // without it, small time-step may result in ocillatory behaviour
+    phi = fvc::flux(U) + rAUf * (gradpDiff_f() + fvc::ddtCorr(U, phi));
+}
+else if(RhieChow)
+{
+    tmp<surfaceScalarField> gradpDiff_f
+    (
+        (((fvc::interpolate(fvc::grad(p)) & ed) - faceGradient.snGrad(p)) * ed)
+        & mesh.Sf()
+    );
+    
+    phi = fvc::flux(U) + rAUf * gradpDiff_f();
     gradpDiff_f.clear();
+}
+else if (ddtCorr)
+{
+    phi = fvc::flux(U) + rAUf * fvc::ddtCorr(U, phi);
 }
 else
 {
