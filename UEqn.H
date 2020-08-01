@@ -58,7 +58,7 @@ tmp<fvVectorMatrix> tUEqn
 (
       fvm::ddt(U) // shall be implicit Euler
     // classical CrankNicolson scheme split
-    + 0.5*(fvm::div(phi,U) + fvc::div(phi,U.oldTime())) 
+    + 0.5*(fvm::div(phi,U) + fvc::div(phi.oldTime(),U.oldTime())) 
     - 0.5*(
           // written for eddy viscosity as it's easy to split
           fvm::laplacian(turbulence->nuEff(), U) 
